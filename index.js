@@ -9,8 +9,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// const OPENAI_KEY = process.env.OPENAI_KEY;
-const OPENAI_KEY = "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";
+const OPENAI_KEY = process.env.OPENAI_KEY;
 console.log(OPENAI_KEY)
 // tessting custom middleware
 app.get('/', async (req, res) => {
