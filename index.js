@@ -9,16 +9,19 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const openaiKey = process.env.OPENAI_KEY;
+// const OPENAI_KEY = process.env.OPENAI_KEY;
+const OPENAI_KEY = "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";
+console.log(OPENAI_KEY)
 // tessting custom middleware
 app.get('/', async (req, res) => {
   res.status(200).jsonp({message: "Welcome to the AI ASSISTANT Server!"})
 })
-
+ 
 // AI Assistant middleware to fetch response 
 app.post("/chat", async (req, res) => {
   const { messages } = req.body;
 
+  console.log(messages)
   if (!Array.isArray(messages) || !messages.length) {
     res.status(400).json({
       success: false,
@@ -35,6 +38,7 @@ app.post("/chat", async (req, res) => {
     "\nAI: ";
 
   const reqUrl = "https://api.openai.com/v1/completions";
+
   const reqBody = {
     model: "text-davinci-003",
     prompt: requiredPrompt,
@@ -42,11 +46,12 @@ app.post("/chat", async (req, res) => {
     temperature: 0.8,
   };
 
+  
   try {
     const response = await axios.post(reqUrl, reqBody, {
       headers: {
         "content-type": "application/json",
-        authorization: `Bearer ${openaiKey}`,
+        authorization: `Bearer ${OPENAI_KEY}`,
       },
     });
     const data = response.data;
@@ -57,6 +62,7 @@ app.post("/chat", async (req, res) => {
       data: answer.trim(),
     });
   } catch (err) {
+    console.log(err)
     res.status(500).json({
       success: false,
       message: err.message || "Something went wrong",
